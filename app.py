@@ -1,6 +1,7 @@
 import requests
-from flask import request, Flask
 import json
+from flask import request, Flask
+from flask_cors import cross_origin
 from src.city_map import get_city
 
 app = Flask(__name__)
@@ -8,6 +9,7 @@ app.config["DEBUG"] = True
 
 
 @app.route('/forecast', methods=['GET'])
+@cross_origin()
 def home():
     try:
         city = get_city(request.args.get('city'))
@@ -23,12 +25,6 @@ def home():
         city_name = result['city_name']
         description = str(result['description']).lower()
 
-        # response = \
-        #     f'{city_name} terá {description},\
-        #      com temperatura de {temp}ºC,\
-        #       máxima de {max_temp}ºC\
-        #        e mínima de {min_temp}ºC'
-
         return json.dumps({
             "city_name": city_name,
             "description": description,
@@ -37,12 +33,12 @@ def home():
             "min_temp": f'{min_temp}ºC'
         })
     except Exception as ex:
-        return f'Não foi possível obter os dados climaticos para o token {city}: {ex}'
+        return f'Não foi possível obter os dados climaticos: {ex}'
 
 
 @app.route('/')
 def index():
-    return "<h1>Welcome to Heroku server !!</h1>"
+    return "<h1>Welcome to Forecast Weather API!</h1>"
 
 
 if __name__ == '__main__':
