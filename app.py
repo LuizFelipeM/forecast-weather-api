@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.config["DEBUG"] = True
 
 
-@app.route('/', methods=['GET'])
+@app.route('/forecast', methods=['GET'])
 def home():
     try:
         city = get_city(request.args.get('city'))
@@ -40,4 +40,11 @@ def home():
         return f'Não foi possível obter os dados climaticos para o token {city}: {ex}'
 
 
-app.run()
+@app.route('/')
+def index():
+    return "<h1>Welcome to Heroku server !!</h1>"
+
+
+if __name__ == '__main__':
+    # Threaded option to enable multiple instances for multiple user access support
+    app.run(threaded=True, port=5000)
