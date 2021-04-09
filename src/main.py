@@ -29,8 +29,6 @@ def home():
         #       máxima de {max_temp}ºC\
         #        e mínima de {min_temp}ºC'
 
-        response =
-
         return json.dumps({
             "city_name": city_name,
             "description": description,
