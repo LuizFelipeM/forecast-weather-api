@@ -2,7 +2,6 @@ import requests
 import json
 from flask import request, Flask
 from flask_cors import cross_origin
-from src.city_map import get_city
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -12,8 +11,13 @@ app.config["DEBUG"] = True
 @cross_origin()
 def home():
     try:
-        city = get_city(request.args.get('city'))
-        req = requests.get(f'https://api.hgbrasil.com/weather?woeid={city}')
+        woeid = request.args.get('woeid')
+        url = 'https://api.hgbrasil.com/weather'
+
+        if woeid:
+            url += f'?woeid={woeid}'
+
+        req = requests.get(url)
         result = dict(json.loads(req.text))['results']
 
         forecast = result['forecast']
